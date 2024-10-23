@@ -1,5 +1,8 @@
 package org.xiaoc.springbootinit.mapper;
 
+import jakarta.annotation.Resource;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 import org.xiaoc.springbootinit.model.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -10,6 +13,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity org.xiaoc.springbootinit.model.entity.User
 */
 public interface UserMapper extends BaseMapper<User> {
+
 
 }
 

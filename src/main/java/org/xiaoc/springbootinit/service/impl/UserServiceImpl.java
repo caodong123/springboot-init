@@ -1,6 +1,7 @@
 package org.xiaoc.springbootinit.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.annotation.Resource;
 import org.xiaoc.springbootinit.model.entity.User;
 import org.xiaoc.springbootinit.service.UserService;
 import org.xiaoc.springbootinit.mapper.UserMapper;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     implements UserService{
+
 
 }
 
