@@ -125,7 +125,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
 
     /**
-     * 获取登录用户LoginUserVO    user -> loginUserVO
+     *    user -> loginUserVO
      * @param user
      * @return
      */
