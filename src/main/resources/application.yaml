@@ -1,22 +1,44 @@
 spring:
   application:
     name: springboot-init
-# todo MySQL????? ?????????????
+  # todo MySQL配置
   datasource:
     url: jdbc:mysql://localhost:3306/init_db?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
     username: root
     password: 123456
-
+# 端口号
 server:
   port: 8101
 
 # mybatis-plus配置
 mybatis-plus:
   configuration:
-    map-underscore-to-camel-case: false
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: false # 驼峰下划线转换
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 日志输出
   global-config:
     db-config:
       logic-delete-field: isDelete # 全局逻辑删除的实体字段名
       logic-delete-value: 1 # 逻辑已删除值（默认为 1）
       logic-not-delete-value: 0 # 逻辑未删除值（默认为 0）
+
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  group-configs:
+    - group: 'default'   #分组名称
+      paths-to-match: '/**'   #配置需要匹配的路径,默认为/**
+      packages-to-scan: org.xiaoc.springbootinit.controller    #配置要扫描包的路径,一般配置到启动类所在的包名
+
+# knife4j项目访问访问地址:http://127.0.0.1:8101/doc.html#/home
+knife4j:
+  enable: true
+  # 设置为true以启用Knife4j增强功能,这将再应用程序中启用Knife4j UI
+  setting:
+    # language: 设置Knife4j UI的语言,默认为zh_cn,可选值为zh_cn或en
+    language: zh_cn

@@ -9,7 +9,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.util.DigestUtils;
 import org.xiaoc.springbootinit.common.ErrorCode;
 import org.xiaoc.springbootinit.exception.ThrowUtils;
-import org.xiaoc.springbootinit.model.dto.user.UserRegisterRequest;
 import org.xiaoc.springbootinit.model.entity.User;
 import org.xiaoc.springbootinit.model.vo.LoginUserVO;
 import org.xiaoc.springbootinit.service.UserService;
