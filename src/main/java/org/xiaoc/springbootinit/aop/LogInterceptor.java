@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class LogInterceptor {
 
-
     @Around("execution (* org.xiaoc.springbootinit.controller.*.*(..))")
     public Object doIntercept(ProceedingJoinPoint joinPoint) throws Throwable {
         // 记录时间
