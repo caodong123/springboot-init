@@ -1,7 +1,10 @@
 package org.xiaoc.springbootinit.service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.xiaoc.springbootinit.model.dto.user.UserRegisterRequest;
 import org.xiaoc.springbootinit.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.xiaoc.springbootinit.model.vo.LoginUserVO;
 
 /**
 * @author CAODONG
@@ -10,4 +13,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface UserService extends IService<User> {
 
+    LoginUserVO login(String userAccount, String userPassword, HttpServletRequest request);
+
+
+    long register(String userAccount, String userPassword, String checkPassword);
 }
