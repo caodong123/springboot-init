@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.DigestUtils;
 import org.xiaoc.springbootinit.common.ErrorCode;
+import org.xiaoc.springbootinit.exception.BusinessException;
 import org.xiaoc.springbootinit.exception.ThrowUtils;
 import org.xiaoc.springbootinit.model.entity.User;
 import org.xiaoc.springbootinit.model.vo.LoginUserVO;
@@ -28,6 +29,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     implements UserService{
 
 
+    /**
+     * 用户登录
+     * @param userAccount
+     * @param userPassword
+     * @param request
+     * @return
+     */
     @Override
     public LoginUserVO login(String userAccount, String userPassword, HttpServletRequest request) {
         // 1. 校验
@@ -80,9 +88,44 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return user.getId();
     }
 
+    /**
+     * 用户注销
+     * @param request
+     * @return
+     */
+    @Override
+    public boolean logout(HttpServletRequest request) {
+        if(request.getSession().getAttribute(USER_LOGIN_STATE) == null){
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR,"用户未登录");
+        }
+        //移除登录态
+        request.getSession().removeAttribute(USER_LOGIN_STATE);
+        return true;
+    }
 
     /**
-     * 获取登录用户LoginUserVO
+     * 获取当前登录的用户
+     * @param request
+     * @return
+     */
+    @Override
+    public LoginUserVO getLoginUser(HttpServletRequest request) {
+        if(request.getSession().getAttribute(USER_LOGIN_STATE) == null){
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR,"用户未登录");
+        }
+        // 获取登录态中记录的用户
+        User user = (User) request.getSession().getAttribute(USER_LOGIN_STATE);
+        // 防止获得脏数据，重新在数据库中查询
+        user = this.getById(user.getId());
+        if(user == null){
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR,"用户未登录");
+        }
+        return getLoginUserVO(user);
+    }
+
+
+    /**
+     * 获取登录用户LoginUserVO    user -> loginUserVO
      * @param user
      * @return
      */

@@ -9,6 +9,7 @@ import org.xiaoc.springbootinit.common.BaseResponse;
 import org.xiaoc.springbootinit.common.ErrorCode;
 import org.xiaoc.springbootinit.common.ResultUtils;
 import org.xiaoc.springbootinit.exception.BusinessException;
+import org.xiaoc.springbootinit.exception.ThrowUtils;
 import org.xiaoc.springbootinit.model.dto.user.UserLoginRequest;
 import org.xiaoc.springbootinit.model.dto.user.UserRegisterRequest;
 import org.xiaoc.springbootinit.model.vo.LoginUserVO;
@@ -49,7 +50,20 @@ public class UserController {
         }
         LoginUserVO loginUser = userService.login(userAccount, userPassword,request);
         return ResultUtils.success(loginUser);
+    }
 
+    @PostMapping("/logout")
+    public BaseResponse<Boolean> logout(HttpServletRequest request){
+        ThrowUtils.throwIf(request==null,ErrorCode.PARAMS_ERROR);
+        boolean result = userService.logout(request);
+        return ResultUtils.success(result);
+    }
+
+    @GetMapping("/get/login")
+    public BaseResponse<LoginUserVO> getLoginUser(HttpServletRequest request){
+        ThrowUtils.throwIf(request==null,ErrorCode.PARAMS_ERROR);
+        LoginUserVO loginUser = userService.getLoginUser(request);
+        return ResultUtils.success(loginUser);
     }
 
 
