@@ -1,24 +1,18 @@
-package org.xiaoc.springbootinit.model.vo;
+package org.xiaoc.springbootinit.model.dto.user;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
-/**
- * 脱敏用户信息
- */
 @Data
-public class LoginUserVO implements Serializable {
-    /**
-     * id主键
-     */
-    private Long id;
+public class UserUpdateRequest implements Serializable {
 
+    /**
+     * 用户密码
+     */
+    private String userPassword;
 
     /**
      * 用户昵称
@@ -39,16 +33,6 @@ public class LoginUserVO implements Serializable {
      * 用户角色   user/admin/ban
      */
     private String userRole;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
 
     private static final long serialVersionUID = 1L;
 

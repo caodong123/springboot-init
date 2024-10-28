@@ -10,4 +10,11 @@ public interface UserConstant {
      * 加密时的盐值
      */
     String SALT = "xiaoc";
+
+    // 用户的权限类型
+    String ADMIN = "admin";
+
+    String USER = "user";
+
+    String BAN = "ban";
 }

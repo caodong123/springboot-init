@@ -1,6 +1,8 @@
 package org.xiaoc.springbootinit.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,13 +10,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.DigestUtils;
 import org.xiaoc.springbootinit.common.ErrorCode;
+import org.xiaoc.springbootinit.constant.PageConstant;
 import org.xiaoc.springbootinit.exception.BusinessException;
 import org.xiaoc.springbootinit.exception.ThrowUtils;
+import org.xiaoc.springbootinit.model.dto.user.UserQueryRequest;
 import org.xiaoc.springbootinit.model.entity.User;
 import org.xiaoc.springbootinit.model.vo.LoginUserVO;
+import org.xiaoc.springbootinit.model.vo.UserVO;
 import org.xiaoc.springbootinit.service.UserService;
 import org.xiaoc.springbootinit.mapper.UserMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.xiaoc.springbootinit.constant.UserConstant.SALT;
 import static org.xiaoc.springbootinit.constant.UserConstant.USER_LOGIN_STATE;
@@ -121,6 +131,58 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR,"用户未登录");
         }
         return getLoginUserVO(user);
+    }
+
+    @Override
+    public boolean deleteUser(Long id) {
+        return this.removeById(id);
+    }
+
+    /**
+     * 构造查询的wrapper
+     * @param userQueryRequest
+     * @return
+     */
+    @Override
+    public Wrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest) {
+        Long id = userQueryRequest.getId();
+        String userAccount = userQueryRequest.getUserAccount();
+        String userName = userQueryRequest.getUserName();
+        String userProfile = userQueryRequest.getUserProfile();
+        String userRole = userQueryRequest.getUserRole();
+        String sortFiled = userQueryRequest.getSortFiled();
+        String sortOrder = userQueryRequest.getSortOrder();
+        // 构建条件
+        QueryWrapper<User> wrapper = new QueryWrapper<User>();
+        // 精确查询  id/userAccount/用户类型
+        wrapper.eq(id != null, "id", id);
+        wrapper.eq(StringUtils.isNotBlank(userAccount),"userAccount",userAccount);
+        wrapper.eq(StringUtils.isNotBlank(userRole),"userRole",userRole);
+        // 模糊查询  userName/userProfile
+        wrapper.like(StringUtils.isNotBlank(userName),"userName",userName);
+        wrapper.like(StringUtils.isNotBlank(userProfile),"userProfile",userProfile);
+        // 排序
+        wrapper.orderBy(StringUtils.isNotBlank(sortFiled),StringUtils.equals(sortOrder,PageConstant.SORT_ORDER_ASC),sortFiled);
+
+        return wrapper;
+    }
+
+    /**
+     * 获取用户脱敏后的信息
+     * @param userList
+     * @return
+     */
+    @Override
+    public List<UserVO> getUserVo(List<User> userList) {
+        if(userList == null || userList.size() <= 0){
+            return new ArrayList<>();
+        }
+        List<UserVO> userVOList = userList.stream().map(user -> {
+            UserVO userVo = new UserVO();
+            BeanUtils.copyProperties(user, userVo);
+            return userVo;
+        }).toList();
+        return userVOList;
     }
 
 

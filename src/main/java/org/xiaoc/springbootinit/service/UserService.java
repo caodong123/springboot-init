@@ -1,10 +1,15 @@
 package org.xiaoc.springbootinit.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import jakarta.servlet.http.HttpServletRequest;
+import org.xiaoc.springbootinit.model.dto.user.UserQueryRequest;
 import org.xiaoc.springbootinit.model.dto.user.UserRegisterRequest;
 import org.xiaoc.springbootinit.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.xiaoc.springbootinit.model.vo.LoginUserVO;
+import org.xiaoc.springbootinit.model.vo.UserVO;
+
+import java.util.List;
 
 /**
 * @author CAODONG
@@ -21,4 +26,10 @@ public interface UserService extends IService<User> {
     boolean logout(HttpServletRequest request);
 
     LoginUserVO getLoginUser(HttpServletRequest request);
+
+    boolean deleteUser(Long id);
+
+    Wrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
+
+    List<UserVO> getUserVo(List<User> userList);
 }
