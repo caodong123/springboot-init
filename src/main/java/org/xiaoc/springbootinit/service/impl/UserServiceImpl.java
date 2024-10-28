@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.util.DigestUtils;
 import org.xiaoc.springbootinit.common.ErrorCode;
 import org.xiaoc.springbootinit.constant.PageConstant;
+import org.xiaoc.springbootinit.constant.UserConstant;
 import org.xiaoc.springbootinit.exception.BusinessException;
 import org.xiaoc.springbootinit.exception.ThrowUtils;
 import org.xiaoc.springbootinit.model.dto.user.UserQueryRequest;
@@ -183,6 +184,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             return userVo;
         }).toList();
         return userVOList;
+    }
+
+    /**
+     * 根据id封禁用户
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean banUser(Long id) {
+        boolean result = update(Wrappers.lambdaUpdate(User.class).eq(User::getId, id).set(User::getUserRole, UserConstant.BAN));
+        ThrowUtils.throwIf(!result, ErrorCode.SYSTEM_ERROR,"封禁用户失败");
+        return result;
     }
 
 

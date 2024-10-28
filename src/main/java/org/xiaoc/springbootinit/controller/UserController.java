@@ -151,5 +151,18 @@ public class UserController {
         return ResultUtils.success(userVoPage);
     }
 
+    /**
+     * 用户封禁
+     * @param userBanRequest
+     * @return
+     */
+    @PostMapping("/ban")
+    @AuthCheck(Role = ADMIN)
+    public BaseResponse<Boolean> userBan(@RequestBody UserBanRequest userBanRequest){
+        ThrowUtils.throwIf(userBanRequest==null || userBanRequest.getId() < 0,ErrorCode.PARAMS_ERROR);
+        boolean result = userService.banUser(userBanRequest.getId());
+        return ResultUtils.success(result);
+    }
+
 
 }

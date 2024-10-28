@@ -32,4 +32,6 @@ public interface UserService extends IService<User> {
     Wrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
 
     List<UserVO> getUserVo(List<User> userList);
+
+    boolean banUser(Long id);
 }
