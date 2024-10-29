@@ -133,6 +133,12 @@ public class UserController {
     }
 
 
+    /**
+     * 分页获取用户信息
+     * @param userQueryRequest
+     * @param request
+     * @return
+     */
     @PostMapping("/list/page/vo")
     public BaseResponse<Page<UserVO>> listUserVoByPage(@RequestBody UserQueryRequest userQueryRequest,HttpServletRequest request){
         ThrowUtils.throwIf(userQueryRequest==null,ErrorCode.PARAMS_ERROR);

@@ -1,7 +1,10 @@
 package org.xiaoc.springbootinit.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import org.xiaoc.springbootinit.model.dto.article.ArticleQueryRequest;
 import org.xiaoc.springbootinit.model.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.xiaoc.springbootinit.model.entity.User;
 
 /**
 * @author CAODONG
@@ -10,4 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface ArticleService extends IService<Article> {
 
+    void checkArticle(Article article);
+
+    Wrapper<Article> getQueryWrapper(ArticleQueryRequest articleQueryRequest);
 }
