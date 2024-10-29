@@ -1,6 +1,5 @@
 package org.xiaoc.springbootinit.controller;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +13,6 @@ import org.xiaoc.springbootinit.common.ResultUtils;
 import org.xiaoc.springbootinit.exception.BusinessException;
 import org.xiaoc.springbootinit.exception.ThrowUtils;
 import org.xiaoc.springbootinit.manager.CosManager;
-import org.xiaoc.springbootinit.model.dto.file.UploadFileRequest;
 import org.xiaoc.springbootinit.model.entity.User;
 import org.xiaoc.springbootinit.model.vo.LoginUserVO;
 import org.xiaoc.springbootinit.service.UserService;
