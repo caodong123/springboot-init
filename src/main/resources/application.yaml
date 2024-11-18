@@ -31,8 +31,8 @@ server:
   port: 8101
 
 # 对象存储（腾讯云cos
-cos:
-  client:
+#cos:
+#  client:
 #    accessKey: *********
 #    secretKey: *********
 #    region: ap-shanghai
