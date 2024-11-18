@@ -18,11 +18,8 @@ import org.xiaoc.springbootinit.exception.ThrowUtils;
 import org.xiaoc.springbootinit.model.dto.article.ArticleAddRequest;
 import org.xiaoc.springbootinit.model.dto.article.ArticleDeleteRequest;
 import org.xiaoc.springbootinit.model.dto.article.ArticleQueryRequest;
-import org.xiaoc.springbootinit.model.dto.user.UserQueryRequest;
 import org.xiaoc.springbootinit.model.entity.Article;
-import org.xiaoc.springbootinit.model.entity.User;
 import org.xiaoc.springbootinit.model.vo.LoginUserVO;
-import org.xiaoc.springbootinit.model.vo.UserVO;
 import org.xiaoc.springbootinit.service.ArticleService;
 import org.xiaoc.springbootinit.service.UserService;
 
@@ -80,6 +77,11 @@ public class ArticleController {
         return ResultUtils.success(result);
     }
 
+    /**
+     * 更新文章
+     * @param articleAddRequest
+     * @return
+     */
     @PostMapping("/update")
     public BaseResponse<Boolean> updateArticle(@RequestBody ArticleAddRequest articleAddRequest){
         ThrowUtils.throwIf(articleAddRequest == null, ErrorCode.PARAMS_ERROR);
@@ -148,9 +150,10 @@ public class ArticleController {
         ThrowUtils.throwIf( pageSize > 200,ErrorCode.PARAMS_ERROR);
         //获取查询wrapper
         Wrapper<Article> wrapper = articleService.getQueryWrapper(articleQueryRequest);
-        IPage<Article> articleIPage = articleService.page(new Page<>(current, pageSize), wrapper);
+        IPage<Article> articleIPage = articleService.page(new Page<Article>(current, pageSize), wrapper);
         //获取数据
         Page<Article> articlePage = new Page<>(current,pageSize,articleIPage.getTotal());
+        articlePage.setRecords(articleIPage.getRecords());
         return ResultUtils.success(articlePage);
     }
 

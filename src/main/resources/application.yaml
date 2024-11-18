@@ -19,6 +19,11 @@ spring:
 #      password:
       database: 1
       timeout: 5000ms
+    # todo 需替换配置，然后取消注释
+  elasticsearch:
+    uris: http://localhost:9200
+    username: root
+    password: 123456
 
 
 # 端口号
