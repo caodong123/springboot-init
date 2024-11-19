@@ -1,5 +1,6 @@
 package org.xiaoc.springbootinit.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -8,6 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.xiaoc.springbootinit.common.ErrorCode;
 import org.xiaoc.springbootinit.constant.PageConstant;
@@ -196,6 +198,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         boolean result = update(Wrappers.lambdaUpdate(User.class).eq(User::getId, id).set(User::getUserRole, UserConstant.BAN));
         ThrowUtils.throwIf(!result, ErrorCode.SYSTEM_ERROR,"封禁用户失败");
         return result;
+    }
+
+    /**
+     * 批量删除用户
+     * @param userIdList
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean batchDelteUser(List<Long> userIdList) {
+        //校验数据
+        ThrowUtils.throwIf(CollUtil.isEmpty(userIdList), ErrorCode.PARAMS_ERROR);
+        //批量删除
+        for (Long id : userIdList) {
+            boolean result = this.removeById(id);
+            ThrowUtils.throwIf(!result, ErrorCode.SYSTEM_ERROR, "删除失败");
+        }
+        return true;
     }
 
 

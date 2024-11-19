@@ -1,5 +1,8 @@
 package org.xiaoc.springbootinit.controller;
 
+import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -11,20 +14,21 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
+import org.xiaoc.springbootinit.annotation.AuthCheck;
 import org.xiaoc.springbootinit.common.BaseResponse;
 import org.xiaoc.springbootinit.common.ErrorCode;
 import org.xiaoc.springbootinit.common.ResultUtils;
+import org.xiaoc.springbootinit.constant.UserConstant;
 import org.xiaoc.springbootinit.exception.ThrowUtils;
-import org.xiaoc.springbootinit.model.dto.article.ArticleAddRequest;
-import org.xiaoc.springbootinit.model.dto.article.ArticleDeleteRequest;
-import org.xiaoc.springbootinit.model.dto.article.ArticleGetMineRequest;
-import org.xiaoc.springbootinit.model.dto.article.ArticleQueryRequest;
+import org.xiaoc.springbootinit.model.dto.article.*;
 import org.xiaoc.springbootinit.model.entity.Article;
 import org.xiaoc.springbootinit.model.vo.LoginUserVO;
 import org.xiaoc.springbootinit.service.ArticleService;
 import org.xiaoc.springbootinit.service.UserService;
 
 import java.util.List;
+
+import static org.xiaoc.springbootinit.constant.UserConstant.ADMIN;
 
 @Slf4j
 @RestController
@@ -166,6 +170,23 @@ public class ArticleController {
         Page<Article> articlePage = new Page<>(current,pageSize,articleIPage.getTotal());
         articlePage.setRecords(articleIPage.getRecords());
         return ResultUtils.success(articlePage);
+    }
+
+
+    /**
+     * 批量删除文章
+     * @param articleBatchDeleteRequest
+     * @return
+     */
+    @PostMapping("/batch/delete")
+    @AuthCheck(Role = ADMIN)
+    public BaseResponse<Boolean> batchDeleteArticle(@RequestBody ArticleBatchDeleteRequest articleBatchDeleteRequest){
+        ThrowUtils.throwIf(articleBatchDeleteRequest==null,ErrorCode.PARAMS_ERROR);
+        List<Long> articleIdList = articleBatchDeleteRequest.getArticleIdList();
+        ThrowUtils.throwIf(articleIdList==null || articleIdList.isEmpty(),ErrorCode.PARAMS_ERROR);
+        boolean result = articleService.batchDeleteArticle(articleIdList);
+        ThrowUtils.throwIf(!result,ErrorCode.SYSTEM_ERROR,"批量删除失败");
+        return ResultUtils.success(result);
     }
 
 

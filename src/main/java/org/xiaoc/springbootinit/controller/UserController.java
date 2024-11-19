@@ -15,6 +15,7 @@ import org.xiaoc.springbootinit.common.ErrorCode;
 import org.xiaoc.springbootinit.common.ResultUtils;
 import org.xiaoc.springbootinit.exception.BusinessException;
 import org.xiaoc.springbootinit.exception.ThrowUtils;
+import org.xiaoc.springbootinit.model.dto.article.ArticleBatchDeleteRequest;
 import org.xiaoc.springbootinit.model.dto.user.*;
 import org.xiaoc.springbootinit.model.entity.User;
 import org.xiaoc.springbootinit.model.vo.LoginUserVO;
@@ -167,6 +168,23 @@ public class UserController {
     public BaseResponse<Boolean> userBan(@RequestBody UserBanRequest userBanRequest){
         ThrowUtils.throwIf(userBanRequest==null || userBanRequest.getId() < 0,ErrorCode.PARAMS_ERROR);
         boolean result = userService.banUser(userBanRequest.getId());
+        return ResultUtils.success(result);
+    }
+
+
+    /**
+     * 批量删除用户
+     * @param userBatchDeleteRequest
+     * @return
+     */
+    @PostMapping("/batch/delete")
+    @AuthCheck(Role = ADMIN)
+    public BaseResponse<Boolean> batchDeleteArticle(@RequestBody UserBatchDeleteRequest userBatchDeleteRequest){
+        ThrowUtils.throwIf(userBatchDeleteRequest==null,ErrorCode.PARAMS_ERROR);
+        List<Long> userIdList = userBatchDeleteRequest.getUserIdList();
+        ThrowUtils.throwIf(userIdList==null || userIdList.isEmpty(),ErrorCode.PARAMS_ERROR);
+        boolean result = userService.batchDelteUser(userIdList);
+        ThrowUtils.throwIf(!result,ErrorCode.SYSTEM_ERROR,"批量删除失败");
         return ResultUtils.success(result);
     }
 

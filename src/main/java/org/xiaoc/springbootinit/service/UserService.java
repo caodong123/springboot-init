@@ -34,4 +34,6 @@ public interface UserService extends IService<User> {
     List<UserVO> getUserVo(List<User> userList);
 
     boolean banUser(Long id);
+
+    boolean batchDelteUser(List<Long> userIdList);
 }

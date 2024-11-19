@@ -2,9 +2,11 @@ package org.xiaoc.springbootinit.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
 import org.xiaoc.springbootinit.common.ErrorCode;
 import org.xiaoc.springbootinit.constant.PageConstant;
 import org.xiaoc.springbootinit.exception.BusinessException;
@@ -72,6 +74,24 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         // 排序
         wrapper.orderBy(StringUtils.isNotBlank(sortFiled),StringUtils.equals(sortOrder, PageConstant.SORT_ORDER_ASC),sortFiled);
         return wrapper;
+    }
+
+    /**
+     * 批量删除文章 （事务管理）
+     * @param articleIdList
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean batchDeleteArticle(List<Long> articleIdList) {
+        //校验数据
+        ThrowUtils.throwIf(CollUtil.isEmpty(articleIdList), ErrorCode.PARAMS_ERROR);
+        //批量删除
+        for (Long id : articleIdList) {
+            boolean result = this.removeById(id);
+            ThrowUtils.throwIf(!result, ErrorCode.SYSTEM_ERROR, "删除失败");
+        }
+        return true;
     }
 }
 
