@@ -31,12 +31,12 @@ server:
   port: 8101
 
 # 对象存储（腾讯云cos
-#cos:
-#  client:
-#    accessKey: *********
-#    secretKey: *********
-#    region: ap-shanghai
-#    bucket: web-object-1318943201
+cos:
+  client:
+    accessKey: AKIDUpxqU1MSSIvMhyAEAnIagcJm12oLglbC
+    secretKey: So12pN4awHi051yquvnhXIvMYWUM2Xqz
+    region: ap-shanghai
+    bucket: web-object-1318943201
 
 # mybatis-plus配置
 mybatis-plus:

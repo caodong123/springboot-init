@@ -17,6 +17,7 @@ import org.xiaoc.springbootinit.common.ResultUtils;
 import org.xiaoc.springbootinit.exception.ThrowUtils;
 import org.xiaoc.springbootinit.model.dto.article.ArticleAddRequest;
 import org.xiaoc.springbootinit.model.dto.article.ArticleDeleteRequest;
+import org.xiaoc.springbootinit.model.dto.article.ArticleGetMineRequest;
 import org.xiaoc.springbootinit.model.dto.article.ArticleQueryRequest;
 import org.xiaoc.springbootinit.model.entity.Article;
 import org.xiaoc.springbootinit.model.vo.LoginUserVO;
@@ -122,17 +123,27 @@ public class ArticleController {
      * @param request
      * @return
      */
-    @GetMapping("/get/my")
-    public BaseResponse<List<Article>> getMyArticles(HttpServletRequest request){
+    @PostMapping("/get/my")
+    public BaseResponse<Page<Article>> getMyArticles(@RequestBody ArticleGetMineRequest articleGetMineRequest, HttpServletRequest request){
+        ThrowUtils.throwIf(articleGetMineRequest==null,ErrorCode.PARAMS_ERROR);
         // 获取登录用户
         LoginUserVO user = userService.getLoginUser(request);
         ThrowUtils.throwIf(user == null, ErrorCode.NOT_LOGIN_ERROR);
+        // 获取分页的参数 current pageSize
+        int current = articleGetMineRequest.getCurrent();
+        int pageSize = articleGetMineRequest.getPageSize();
+        //限制一次获取的数量
+        ThrowUtils.throwIf( pageSize > 200,ErrorCode.PARAMS_ERROR);
+        //获取查询wrapper
         Long userId = user.getId();
         // 根据id查询文章
         LambdaQueryWrapper<Article> wrapper = Wrappers.lambdaQuery(Article.class)
                 .eq(Article::getUserId, userId);
-        List<Article> articleList = articleService.list(wrapper);
-        return ResultUtils.success(articleList);
+        IPage<Article> articleIPage = articleService.page(new Page<Article>(current, pageSize), wrapper);
+        //获取数据
+        Page<Article> articlePage = new Page<>(current,pageSize,articleIPage.getTotal());
+        articlePage.setRecords(articleIPage.getRecords());
+        return ResultUtils.success(articlePage);
     }
 
     /**
